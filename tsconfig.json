@@ -9,6 +9,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ngx-signalify": [
+        "./dist/ngx-signalify"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
