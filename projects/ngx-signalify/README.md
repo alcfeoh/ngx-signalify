@@ -1,24 +1,40 @@
-# NgxSignalify
+# NgxSignalify (for Angular)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.0.
+To install: `npm install ngx-signalify`
 
-## Code scaffolding
+Then, turn any `Observable` into a `SignalState` object with information about:
+- Are we still loading data?
+- What's the current data?
+- Did any error happen?
 
-Run `ng generate component component-name --project ngx-signalify` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-signalify`.
-> Note: Don't forget to add `--project ngx-signalify` or else it will be added to the default project in your `angular.json` file. 
+Example in your component Typescript code:
+```javascript
+  import { signalify } from 'ngx-signalify'; 
 
-## Build
+  http = inject(HttpClient);
+  comments = signalify(this.http.get(URL));
+```
+HTML template:
+```angular17html
+ @if(comments.loading()) {
+  Loading comments...
+} @else {
+  We have {{comments.data()?.length}} comments
+}
+@if (comments.error()) {
+  Something went wrong!
+}
+```
 
-Run `ng build ngx-signalify` to build the project. The build artifacts will be stored in the `dist/` directory.
+The `SignalState` object has 3  properties - `loading`, `data`, and `error` - all Angular signals:
+```typescript
+export interface SignalState<T> {
+  loading: Signal<boolean>;
+  data: Signal<T | undefined>;
+  error: Signal<Error | undefined>;
+}
+```
 
-## Publishing
+And that's it! You can `signalify` any `Observable` into a `SignalState` object.
 
-After building your library with `ng build ngx-signalify`, go to the dist folder `cd dist/ngx-signalify` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test ngx-signalify` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Live example: https://stackblitz.com/edit/ngx-signalify-demo
